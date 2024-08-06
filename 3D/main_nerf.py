@@ -119,7 +119,6 @@ if __name__ == '__main__':
         if opt.gui:
         from nerf.gui import NeRFGUI
         trainer.train_loader = train_loader # attach dataloader to trainer
-
         gui = NeRFGUI(opt, trainer)
         gui.render()
         
