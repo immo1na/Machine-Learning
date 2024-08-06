@@ -117,18 +117,17 @@ if __name__ == '__main__':
         trainer = Trainer('ngp', opt, model, device=device, workspace=opt.workspace, optimizer=optimizer, ema_decay=0.95, fp16=opt.fp16, lr_scheduler=scheduler, use_checkpoint=opt.ckpt, eval_interval=opt.val_int)
 
         if opt.gui:
-            from nerf.gui import NeRFGUI
-            trainer.train_loader = train_loader # attach dataloader to trainer
+        from nerf.gui import NeRFGUI
+        trainer.train_loader = train_loader # attach dataloader to trainer
 
-            gui = NeRFGUI(opt, trainer)
-            gui.render()
+        gui = NeRFGUI(opt, trainer)
+        gui.render()
         
         else:
-            valid_loader = NeRFDataset(opt, device=device, type='val', H=opt.H, W=opt.W, radius=opt.radius, fovy=opt.fovy, size=opt.val_samples).dataloader()
-            max_epoch = np.ceil(opt.iters / len(train_loader)).astype(np.int32)
-            trainer.train(train_loader, valid_loader, max_epoch)
+        valid_loader = NeRFDataset(opt, device=device, type='val', H=opt.H, W=opt.W, radius=opt.radius, fovy=opt.fovy, size=opt.val_samples).dataloader()
+        max_epoch = np.ceil(opt.iters / len(train_loader)).astype(np.int32)
+        trainer.train(train_loader, valid_loader, max_epoch)
 
-            # also test
-            test_loader = NeRFDataset(opt, device=device, type='test', H=opt.H, W=opt.W, radius=opt.radius, fovy=opt.fovy, size=opt.test_samples).dataloader()
-            trainer.save_mesh(resolution=opt.mesh_res, threshold=opt.mesh_trh)
-            trainer.test(test_loader, write_video=opt.save_video) # test and save video
+        test_loader = NeRFDataset(opt, device=device, type='test', H=opt.H, W=opt.W, radius=opt.radius, fovy=opt.fovy, size=opt.test_samples).dataloader()
+        trainer.save_mesh(resolution=opt.mesh_res, threshold=opt.mesh_trh)
+        trainer.test(test_loader, write_video=opt.save_video) # test and save video
